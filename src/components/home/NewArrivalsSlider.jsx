@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FiShoppingCart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useRef } from "react";
+import ProductCard from "../shared/ProductCard";
 
 const NewArrivalsSlider = ({ data }) => {
   const swiperRef = useRef(null);
@@ -68,55 +69,6 @@ const NewArrivalsSlider = ({ data }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-    </div>
-  );
-};
-
-// ── Product Card ──
-const ProductCard = ({ product }) => {
-  return (
-    <div className="group flex flex-col bg-base-100 rounded-2xl border border-base-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full">
-      {/* Image */}
-      <Link
-        href={`/products/${product.slug}`}
-        className="relative block bg-base-200 aspect-square overflow-hidden shrink-0"
-      >
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-contain p-5 group-hover:scale-110 transition-transform duration-500"
-        />
-
-        {/* New badge */}
-        <span className="absolute top-3 left-3 bg-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">
-          New
-        </span>
-      </Link>
-
-      {/* Info */}
-      <div className="p-4 flex flex-col gap-1 flex-1">
-        <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest">
-          {product.category}
-        </span>
-
-        <Link
-          href={`/products/${product.slug}`}
-          className="font-bold text-neutral text-sm leading-snug hover:text-primary transition-colors duration-150 line-clamp-2 flex-1"
-        >
-          {product.name}
-        </Link>
-
-        {/* Price + cart */}
-        <div className="flex items-center justify-between pt-3 mt-auto border-t border-base-200">
-          <span className="font-black text-primary text-base">
-            ${product.price}
-          </span>
-          <button className="btn btn-primary btn-sm btn-circle shadow-sm hover:scale-110 transition-transform duration-150">
-            <FiShoppingCart size={15} />
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

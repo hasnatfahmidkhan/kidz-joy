@@ -2,6 +2,7 @@
   {
     "title": "Number and Counting Learning Board",
     "bangla": "সংখ্যা ও গণনা শেখার শিক্ষামূলক বোর্ড",
+    "category": "educational",
     "image": "https://i.ibb.co.com/p6Q0fchX/81a72-DDFc-KL-AC-SL1500.jpg",
     "price": 1250,
     "discount": 10,
@@ -27,12 +28,14 @@
       "হ্যান্ডস-অন লার্নিং নিশ্চিত করে",
       "নন-টক্সিক ও শিশু-নিরাপদ উপকরণ"
     ],
-    "featured": true
+    "featured": true,
+    "createdAt": "2026-04-22T10:00:00.000Z"
   },
 
   {
     "title": "Animal and Nature Learning Flash Cards",
     "bangla": "প্রাণী ও প্রকৃতি শেখার ফ্ল্যাশ কার্ড সেট",
+    "category": "flashcards",
     "image": "https://i.ibb.co.com/QFDWpCf4/s-l1600.webp",
     "price": 950,
     "discount": 8,
@@ -58,12 +61,14 @@
       "স্ক্রিনবিহীন শেখার সুযোগ দেয়",
       "প্রি-স্কুল লার্নিং-এর জন্য উপযোগী"
     ],
-    "featured": true
+    "featured": true,
+    "createdAt": "2026-04-22T09:50:00.000Z"
   },
 
   {
     "title": "Fun Logic Matching Cube Game",
     "bangla": "মজার লজিক ম্যাচিং কিউব গেম",
+    "category": "puzzles",
     "image": "https://i.ibb.co.com/3mMvjKnV/71k8-US2-Ls3-L-SL1500.jpg",
     "price": 1150,
     "discount": 14,
@@ -89,14 +94,15 @@
       "মজার মাধ্যমে শেখার সুযোগ দেয়",
       "নন-টক্সিক ও শিশু-নিরাপদ উপকরণ"
     ],
-    "featured": true
+    "featured": true,
+    "createdAt": "2026-04-22T09:40:00.000Z"
   },
 
   {
     "title": "Creative Story Builder Picture Cards",
     "bangla": "মজার গল্প বানানোর পিকচার কার্ড সেট",
     "image": "https://i.ibb.co.com/RGMWJdwt/71zppz-Gon-RL-AC-SX679.jpg",
-
+    "category": "flashcards",
     "price": 1050,
     "discount": 9,
     "sizes": [],
@@ -121,13 +127,15 @@
       "ফান-ভিত্তিক স্ক্রিনবিহীন শেখা",
       "গ্রুপ ও একক খেলায় উপযোগী"
     ],
-    "featured": true
+    "featured": true,
+    "createdAt": "2026-04-22T09:30:00.000Z"
   },
 
   {
     "title": "Kids Graduation Hat with Costume",
     "bangla": "শিশুদের গ্র্যাজুয়েশন হ্যাট ( কস্টিউম সহ )",
     "image": "https://i.ibb.co.com/vxMYHV6V/image.png",
+    "category": "costumes",
     "youtube": "https://www.youtube.com/watch?v=kids-graduation-hat-demo",
     "price": 650,
     "discount": 5,
@@ -152,7 +160,8 @@
       "Lightweight ও comfortable",
       "Colorful এবং playful design",
       "Smooth finish, child-friendly"
-    ]
+    ],
+    "createdAt": "2026-04-22T09:20:00.000Z"
   },
 
   {
@@ -184,7 +193,8 @@
       "Bright color এবং superhero design",
       "Non-toxic ও safe material",
       "Birthday party এবং fancy dress এ ব্যবহারযোগ্য"
-    ]
+    ],
+    "createdAt": "2026-04-22T09:10:00.000Z"
   },
 
   {
@@ -214,7 +224,8 @@
       "Realistic props সহ playful design",
       "Non-toxic ও safe material",
       "Birthday party, school activity এ ব্যবহারযোগ্য"
-    ]
+    ],
+    "createdAt": "2026-04-22T09:00:00.000Z"
   },
 
   {
@@ -244,6 +255,7 @@
       "Problem-solving এবং logical thinking উন্নত করে",
       "Durable এবং non-toxic material",
       "Future STEM learning এবং hands-on experience নিশ্চিত করে"
-    ]
+    ],
+    "createdAt": "2026-04-22T08:50:00.000Z"
   }
 ]
