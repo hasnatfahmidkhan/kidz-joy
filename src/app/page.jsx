@@ -1,7 +1,23 @@
+import CategorySection from "@/components/home/CategorySection";
+import FeaturedProducts from "@/components/home/FeaturedProducts";
+import HeroBanner from "@/components/home/HeroBanner";
+import HowItWorks from "@/components/home/HowItWorks";
+import NewArrivals from "@/components/home/NewArrivals";
+import NewsletterSection from "@/components/home/NewsletterSection";
+import PromoBanner from "@/components/home/PromoBanner";
+import Testimonials from "@/components/home/Testimonials";
+
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      Home Page
-    </div>
+    <>
+      <HeroBanner />
+      <CategorySection />
+      <FeaturedProducts />
+      <NewArrivals />
+      <PromoBanner />
+      <HowItWorks />
+      <Testimonials />
+      <NewsletterSection />
+    </>
   );
 }

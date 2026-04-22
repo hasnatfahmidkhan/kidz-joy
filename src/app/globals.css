@@ -3,7 +3,6 @@
   themes: light --default;
 }
 
-
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
@@ -27,3 +26,14 @@
 }
 
 @custom-variant dark (&:where([data-theme=night], [data-theme=night] *));
+
+/* ── Custom animations ── */
+@utility animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+@utility animate-spin-slow-reverse {
+  animation: spin 16s linear infinite reverse;
+}
+
+
