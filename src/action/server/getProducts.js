@@ -63,3 +63,48 @@ export const getNewArrivals = async (limit = 6) =>
     sort: { createdAt: -1 }, // newest first using your new field
     limit,
   });
+
+export const getShopProducts = async ({
+  query = {},
+  sort = {},
+  limit = 12,
+  skip = 0,
+} = {}) => {
+  const db = await dbConnect("products");
+
+  const [products, totalCount] = await Promise.all([
+    // products pipeline
+    db
+      .aggregate([
+        { $match: query },
+        ...(Object.keys(sort).length > 0 ? [{ $sort: sort }] : []),
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            image: 1,
+            price: 1,
+            discount: 1,
+            ratings: 1,
+            reviews: 1,
+            sold: 1,
+            category: 1,
+          },
+        },
+      ])
+      .toArray(),
+
+    // total count pipeline
+    db.aggregate([{ $match: query }, { $count: "total" }]).toArray(),
+  ]);
+
+  return {
+    products: products.map((p) => ({
+      ...p,
+      _id: p._id.toString(),
+    })),
+    totalCount: totalCount[0]?.total || 0,
+  };
+};

@@ -11,6 +11,77 @@ import {
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Link from "next/link";
 
+export const generateMetadata = async ({ params }) => {
+  const { id } = await params;
+  const product = await getProductById(id);
+
+  // product not found — let notFound() handle the page
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "This product does not exist or has been removed.",
+    };
+  }
+
+  const hasDiscount = product.discount > 0;
+  const discountedPrice = hasDiscount
+    ? Math.round(product.price - (product.price * product.discount) / 100)
+    : product.price;
+
+  // clean description — strip newlines for meta tag
+  const metaDescription = product.description
+    ? product.description.replace(/\n/g, " ").slice(0, 160)
+    : `Buy ${product.title} at Kidz Joy. Safe and fun toys for kids.`;
+
+  return {
+    title: product.title,
+    description: metaDescription,
+    keywords: [
+      product.title,
+      product.category,
+      "kids toy",
+      "educational toy",
+      "safe toy",
+      "buy toy online",
+      "kidz joy",
+      product.bangla,
+    ].filter(Boolean),
+
+    openGraph: {
+      title: product.title,
+      description: metaDescription,
+      url: `https://kidzjoy.com/products/${id}`,
+      siteName: "Kidz Joy",
+      images: [
+        {
+          url: product.image,
+          width: 800,
+          height: 800,
+          alt: product.title,
+        },
+      ],
+      type: "website",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: metaDescription,
+      images: [product.image],
+    },
+
+    alternates: {
+      canonical: `https://kidzjoy.com/products/${id}`,
+    },
+
+    // ── Product structured data ──
+    other: {
+      "product:price:amount": discountedPrice,
+      "product:price:currency": "BDT",
+    },
+  };
+};
+
 export default async function ProductDetails({ params }) {
   const { id } = await params;
   const product = await getProductById(id);

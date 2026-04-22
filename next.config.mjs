@@ -5,10 +5,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*",
-        port: "",
-        pathname: "/**",
-        search: "",
+        hostname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.toynix.pk",
       },
     ],
   },
