@@ -12,14 +12,33 @@ const SocialLogin = () => {
   const callbackUrl = params.get("callbackUrl") || "/";
 
   const handleGoogleLogin = async () => {
-    // OAuth flow should redirect to Google
-    setLoading("google");
-    await signIn("google", { callbackUrl });
+    setLoading("google"); // Show loading only on Google button
+
+    try {
+      await signIn("google", {
+        callbackUrl: callbackUrl,
+      });
+      // No need to setLoading(false) on success because redirect happens
+    } catch (error) {
+      console.error("Google login error:", error);
+      setLoading(false);
+      toast.error("Failed to login with Google");
+    }
   };
 
   const handleGithubLogin = async () => {
-    setLoading("github");
-    await signIn("github", { callbackUrl });
+    setLoading("github"); // Show loading only on GitHub button
+
+    try {
+      await signIn("github", {
+        callbackUrl: callbackUrl,
+      });
+      // No need to setLoading(false) on success because redirect happens
+    } catch (error) {
+      console.error("GitHub login error:", error);
+      setLoading(false);
+      toast.error("Failed to login with GitHub");
+    }
   };
 
   return (
@@ -32,8 +51,15 @@ const SocialLogin = () => {
         disabled={loading}
       >
         <FcGoogle size={22} />
-        <span className="font-semibold">
-          {loading === "google" ? "Loading..." : "Continue with Google"}
+        <span className="font-semibold flex items-center gap-2">
+          {loading === "google" ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              Loading...
+            </>
+          ) : (
+            "Continue with Google"
+          )}
         </span>
       </button>
 
@@ -44,8 +70,15 @@ const SocialLogin = () => {
         className="btn py-6.5 rounded-2xl bg-black hover:bg-gray-900 text-white transition-all duration-200 shadow-md cursor-pointer"
       >
         <FaGithub size={20} />
-        <span className="font-semibold">
-          {loading === "github" ? "Loading..." : "Continue with Google"}
+        <span className="font-semibold flex items-center gap-2">
+          {loading === "github" ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              Loading...
+            </>
+          ) : (
+            "Continue with GitHub"
+          )}
         </span>
       </button>
     </div>

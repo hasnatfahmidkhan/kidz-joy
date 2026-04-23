@@ -17,26 +17,34 @@ const LoginForm = () => {
   const getCallbackUrl = () => {
     return params.get("callbackUrl") || "/";
   };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const form = e.target;
+    try {
+      const form = e.target;
 
-    const result = await signIn("credentials", {
-      email: form.email.value,
-      password: form.password.value,
-      redirect: false,
-    });
+      const result = await signIn("credentials", {
+        email: form.email.value,
+        password: form.password.value,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError("Invalid email or password.");
-      setLoading(false); // ❗ important
-      return;
+      if (result?.error) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      // Success
+      router.push(getCallbackUrl());
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // ✅ Always runs (success, error, or exception)
     }
-
-    router.push(getCallbackUrl());
   };
 
   return (
@@ -115,10 +123,10 @@ const LoginForm = () => {
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={!!loading}
         className="btn btn-primary rounded-2xl h-12 font-black"
       >
-        {loading ? (
+        {loading === "credentials" || loading === true ? (
           <span className="loading loading-spinner loading-sm"></span>
         ) : (
           "Login"

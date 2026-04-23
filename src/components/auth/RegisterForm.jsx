@@ -23,22 +23,29 @@ const RegisterForm = () => {
     e.preventDefault();
     setLoading(true);
 
-    const form = e.target;
+    try {
+      const form = e.target;
 
-    const result = await postUser({
-      name: form.name.value,
-      email: form.email.value,
-      password: form.password.value,
-    });
+      const result = await postUser({
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value,
+      });
 
-    if (result.ok) {
-      toast.success(result.message);
-      router.push(getCallbackUrl());
-    } else {
-      toast.error(result.message);
-      setLoading(false);
+      if (result.ok) {
+        toast.success(result.message);
+        router.push(getCallbackUrl());
+      } else {
+        toast.error(result.message || "Registration failed");
+      }
+    } catch (error) {
+      console.error("Register error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // ✅ Always reset
     }
   };
+
   return (
     <form onSubmit={handleRegister} className="card-body p-6 sm:p-8 gap-5">
       {/* Name */}
@@ -123,7 +130,7 @@ const RegisterForm = () => {
 
       {/* Submit */}
       <button
-        disabled={loading}
+        disabled={!!loading}
         className="btn btn-primary rounded-2xl h-12 font-black mt-2"
       >
         {loading ? (
