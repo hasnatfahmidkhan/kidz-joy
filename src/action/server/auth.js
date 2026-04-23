@@ -101,3 +101,58 @@ export const loginUser = async (payload) => {
     return null;
   }
 };
+
+
+export const upsertOAuthUser = async ({ account, profile, user }) => {
+  try {
+    const usersCol = await dbConnect(collections.USERS);
+
+    // NextAuth may provide email in different places depending on provider
+    const email = (profile?.email || user?.email || "").trim().toLowerCase();
+    if (!email) return null; // can't store user without a stable identifier
+
+    const name = profile?.name || user?.name || "";
+    const image = profile?.picture || user?.image || "";
+
+    const provider = account?.provider; // "google" | "github"
+    const providerAccountId = account?.providerAccountId || "";
+
+    // 1) If user exists by email, update it (no duplicate)
+    // 2) If not, insert new (upsert)
+    await usersCol.updateOne(
+      { email },
+      {
+        $set: {
+          name,
+          image,
+          updatedAt: new Date(),
+          // helpful fields for linking/debugging
+          oauth: {
+            provider,
+            providerAccountId,
+          },
+        },
+        $setOnInsert: {
+          email,
+          role: "user",
+          createdAt: new Date(),
+          // Keep consistent with your credentials users
+          provider: provider || "oauth",
+        },
+      },
+      { upsert: true }
+    );
+
+    const dbUser = await usersCol.findOne(
+      { email },
+      { projection: { password: 0 } }
+    );
+
+    return dbUser
+      ? { ...dbUser, _id: dbUser._id.toString() }
+      : null;
+  } catch (err) {
+    console.error("upsertOAuthUser error:", err);
+    return null;
+  }
+};
