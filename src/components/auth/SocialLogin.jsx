@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
@@ -8,7 +8,10 @@ import { FcGoogle } from "react-icons/fc";
 
 const SocialLogin = () => {
   const params = useSearchParams();
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(null);
+  const { status } = useSession();
+  const isAuthLoading = status === "loading";
+  console.log(isAuthLoading);
   const callbackUrl = params.get("callbackUrl") || "/";
 
   const handleGoogleLogin = async () => {
@@ -52,7 +55,7 @@ const SocialLogin = () => {
       >
         <FcGoogle size={22} />
         <span className="font-semibold flex items-center gap-2">
-          {loading === "google" ? (
+          {isAuthLoading || loading === "google" ? (
             <>
               <span className="loading loading-spinner loading-sm"></span>
               Loading...
@@ -71,7 +74,7 @@ const SocialLogin = () => {
       >
         <FaGithub size={20} />
         <span className="font-semibold flex items-center gap-2">
-          {loading === "github" ? (
+          {isAuthLoading || loading === "github" ? (
             <>
               <span className="loading loading-spinner loading-sm"></span>
               Loading...

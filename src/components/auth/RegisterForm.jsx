@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { postUser } from "@/action/server/auth";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const RegisterForm = () => {
   const params = useSearchParams();
@@ -26,23 +27,40 @@ const RegisterForm = () => {
     try {
       const form = e.target;
 
-      const result = await postUser({
-        name: form.name.value,
-        email: form.email.value,
-        password: form.password.value,
+      const name = form.name.value;
+      const email = form.email.value;
+      const password = form.password.value;
+
+      // Step 1: Register the user
+      const result = await postUser({ name, email, password });
+
+      if (!result.ok) {
+        toast.error(result.message || "Registration failed");
+        return;
+      }
+
+      // Step 2: Auto login with same credentials
+      const loginResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      if (result.ok) {
-        toast.success(result.message);
-        router.push(getCallbackUrl());
-      } else {
-        toast.error(result.message || "Registration failed");
+      if (loginResult?.error) {
+        // Registered but login failed — send to login page
+        toast.error("Account created! Please log in manually.");
+        router.push(`/login?callbackUrl=${getCallbackUrl()}`);
+        return;
       }
+
+      // Step 3: Both success — redirect
+      toast.success("Account created! Welcome 🎉");
+      router.push(getCallbackUrl());
     } catch (error) {
       console.error("Register error:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
-      setLoading(false); // ✅ Always reset
+      setLoading(false);
     }
   };
 

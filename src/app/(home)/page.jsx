@@ -6,6 +6,8 @@ import NewArrivals from "@/components/home/NewArrivals";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import PromoBanner from "@/components/home/PromoBanner";
 import Testimonials from "@/components/home/Testimonials";
+import { authOptions } from "@/lib/auth/authOptions";
+import { getServerSession } from "next-auth";
 
 export const metadata = {
   title: "Kidz Joy — Safe & Fun Toys for Kids",
@@ -52,9 +54,12 @@ export const metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
     <>
+      {JSON.stringify(session)}
       <HeroBanner />
       <CategorySection />
       <FeaturedProducts />
