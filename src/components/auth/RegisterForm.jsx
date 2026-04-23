@@ -7,27 +7,36 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { postUser } from "@/action/server/auth";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const RegisterForm = () => {
+  const params = useSearchParams();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const getCallbackUrl = () => {
+    return params.get("callbackUrl") || "/";
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const form = e.target;
-    const payload = {
+
+    const result = await postUser({
       name: form.name.value,
       email: form.email.value,
       password: form.password.value,
-    };
-    const result = await postUser(payload);
+    });
 
     if (result.ok) {
       toast.success(result.message);
-      router.push("/");
+      router.push(getCallbackUrl());
     } else {
       toast.error(result.message);
+      setLoading(false);
     }
   };
   return (
@@ -113,8 +122,15 @@ const RegisterForm = () => {
       </label> */}
 
       {/* Submit */}
-      <button className="btn btn-primary rounded-2xl h-12 font-black mt-2">
-        Create Account
+      <button
+        disabled={loading}
+        className="btn btn-primary rounded-2xl h-12 font-black mt-2"
+      >
+        {loading ? (
+          <span className="loading loading-spinner loading-sm"></span>
+        ) : (
+          "Create Account"
+        )}
       </button>
 
       {/* Divider */}
@@ -126,7 +142,10 @@ const RegisterForm = () => {
       {/* Footer link */}
       <p className="text-center text-sm text-neutral/60 mt-1">
         Already have an account?{" "}
-        <Link href="/login" className="font-black text-primary hover:underline">
+        <Link
+          href={`/login?callbackUrl=${params.get("callbackUrl") || "/"}`}
+          className="font-black text-primary hover:underline"
+        >
           Login
         </Link>
       </p>

@@ -6,7 +6,7 @@ import { FiUser } from "react-icons/fi";
 
 const UserMenu = () => {
   const session = useSession();
-  console.log(session);
+
   return (
     <div className="dropdown dropdown-end">
       <div

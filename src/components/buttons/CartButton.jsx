@@ -17,7 +17,7 @@ const CartButton = ({ product }) => {
   return (
     <button
       onClick={addToCart}
-      className="btn btn-primary btn-lg flex-1 rounded-2xl gap-3 shadow-lg shadow-primary/20"
+      className="btn btn-primary btn-lg flex-1 rounded-2xl gap-3 shadow-lg shadow-primary/20 py-2.5"
     >
       <FiShoppingCart size={20} /> Add to Cart
     </button>

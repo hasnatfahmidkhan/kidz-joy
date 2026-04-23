@@ -13,31 +13,30 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [ischecked, setIschecked] = useState(false);
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(false);
+  const getCallbackUrl = () => {
+    return params.get("callbackUrl") || "/";
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
+
     const form = e.target;
 
-    const payload = {
+    const result = await signIn("credentials", {
       email: form.email.value,
       password: form.password.value,
-      remember: form.remember.checked, // ✅ correct
       redirect: false,
-    };
-
-    const result = await signIn("credentials", {
-      ...payload,
     });
 
     if (result?.error) {
-      // NextAuth commonly returns "CredentialsSignin" here
       setError("Invalid email or password.");
+      setLoading(false); // ❗ important
       return;
     }
-    // ✅ success
 
-    router.push(params.get("callbackUrl") || "/");
+    router.push(getCallbackUrl());
   };
 
   return (
@@ -116,9 +115,14 @@ const LoginForm = () => {
 
       <button
         type="submit"
+        disabled={loading}
         className="btn btn-primary rounded-2xl h-12 font-black"
       >
-        Login
+        {loading ? (
+          <span className="loading loading-spinner loading-sm"></span>
+        ) : (
+          "Login"
+        )}
       </button>
 
       {/* Divider */}
@@ -131,7 +135,7 @@ const LoginForm = () => {
       <p className="text-center text-sm text-neutral/60 mt-1">
         Don&apos;t have an account?{" "}
         <Link
-          href="/register"
+          href={`/register?callbackUrl=${params.get("callbackUrl") || "/"}`}
           className="font-black text-primary hover:underline"
         >
           Register
