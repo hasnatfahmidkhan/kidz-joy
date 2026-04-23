@@ -1,6 +1,7 @@
-import { loginUser } from "@/action/server/auth";
+import { loginUser, upsertOAuthUser } from "@/action/server/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { signIn } from "next-auth/react";
 
 export const authOptions = {
   providers: [
@@ -21,6 +22,12 @@ export const authOptions = {
   ],
 
   callbacks: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        await upsertOAuthUser({ user, account, profile });
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

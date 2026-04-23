@@ -7,8 +7,10 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { postUser } from "@/action/server/auth";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async (e) => {
@@ -23,6 +25,7 @@ const RegisterForm = () => {
 
     if (result.ok) {
       toast.success(result.message);
+      router.push("/");
     } else {
       toast.error(result.message);
     }

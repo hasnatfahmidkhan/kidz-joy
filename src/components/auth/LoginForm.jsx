@@ -5,10 +5,11 @@ import SocialLogin from "./SocialLogin";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
   const router = useRouter();
+  const params = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [ischecked, setIschecked] = useState(false);
   const [error, setError] = useState("");
@@ -16,14 +17,12 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-
     const form = e.target;
 
     const payload = {
       email: form.email.value,
       password: form.password.value,
       remember: form.remember.checked, // ✅ correct
-      //   callbackUrl: "/", // ✅ where to go after login
       redirect: false,
     };
 
@@ -36,10 +35,11 @@ const LoginForm = () => {
       setError("Invalid email or password.");
       return;
     }
-    console.log("result from login form ", result);
     // ✅ success
-    // router.push(result?.url || "/");
+
+    router.push(params.get("callbackUrl") || "/");
   };
+
   return (
     <form onSubmit={handleLogin} className="card-body p-6 sm:p-8 gap-5">
       {/* Error */}
