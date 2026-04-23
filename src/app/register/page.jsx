@@ -1,5 +1,7 @@
 import Link from "next/link";
 import RegisterForm from "@/components/auth/RegisterForm";
+import { Suspense } from "react";
+import PreLoader from "@/components/Loader/PreLoader";
 
 export const metadata = {
   title: "Register",
@@ -23,7 +25,9 @@ export default function RegisterPage() {
 
         {/* Card */}
         <div className="card bg-base-100 border border-base-200 shadow-xl rounded-3xl">
-          <RegisterForm />
+          <Suspense fallback={<PreLoader />}>
+            <RegisterForm />
+          </Suspense>
         </div>
 
         {/* Small note */}

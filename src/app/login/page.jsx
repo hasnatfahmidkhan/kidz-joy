@@ -1,5 +1,7 @@
 import LoginForm from "@/components/auth/LoginForm";
+import PreLoader from "@/components/Loader/PreLoader";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Login",
@@ -21,7 +23,9 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="card bg-base-100 border border-base-200 shadow-xl rounded-3xl">
-          <LoginForm />
+          <Suspense fallback={<PreLoader />}>
+            <LoginForm />
+          </Suspense>
         </div>
 
         {/* Small note */}
