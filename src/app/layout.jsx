@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  // metadataBase: new URL("https://kidzjoy.com"), // ✅ required for og images to resolve
+  metadataBase: new URL("https://kidz-joy.vercel.app/"), // ✅ required for og images to resolve
   title: {
     default: "Kidz Joy — Safe & Fun Toys for Kids",
     template: "%s | Kidz Joy", // ✅ auto appends on child pages

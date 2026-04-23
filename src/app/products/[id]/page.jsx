@@ -50,7 +50,7 @@ export const generateMetadata = async ({ params }) => {
     openGraph: {
       title: product.title,
       description: metaDescription,
-      url: `https://kidzjoy.com/products/${id}`,
+      url: `https://kidz-joy.vercel.app/products/${id}`,
       siteName: "Kidz Joy",
       images: [
         {
@@ -71,7 +71,7 @@ export const generateMetadata = async ({ params }) => {
     },
 
     alternates: {
-      canonical: `https://kidzjoy.com/products/${id}`,
+      canonical: `https://kidz-joy.vercel.app/products/${id}`,
     },
 
     // ── Product structured data ──

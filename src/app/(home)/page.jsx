@@ -27,11 +27,11 @@ export const metadata = {
     title: "Kidz Joy — Safe & Fun Toys for Kids",
     description:
       "Discover a world of safe, imaginative, and educational toys for children aged 3–12.",
-    // url: "https://kidzjoy.com",
+    url: "https://kidz-joy.vercel.app",
     siteName: "Kidz Joy",
     images: [
       {
-        url: "https://res.cloudinary.com/dye6u4hpt/image/upload/v1776876478/Screenshot_2026-04-22_190846_vlbtgi.png",
+        url: "https://kidz-joy.vercel.app/og-home.png",
         width: 1200,
         height: 630,
         alt: "Kidz Joy — Safe & Fun Toys for Kids",
@@ -45,13 +45,11 @@ export const metadata = {
     title: "Kidz Joy — Safe & Fun Toys for Kids",
     description:
       "Discover safe, imaginative, and educational toys for children aged 3–12.",
-    images: [
-      "https://res.cloudinary.com/dye6u4hpt/image/upload/v1776876478/Screenshot_2026-04-22_190846_vlbtgi.png",
-    ],
+    images: ["https://kidz-joy.vercel.app/og-home.png"],
   },
-  // alternates: {
-  //   canonical: "https://kidzjoy.com",
-  // },
+  alternates: {
+    canonical: "https://kidz-joy.vercel.app",
+  },
 };
 
 export default function Home() {

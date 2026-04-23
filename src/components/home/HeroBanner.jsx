@@ -5,7 +5,7 @@ import { FiShoppingBag, FiArrowRight } from "react-icons/fi";
 const HeroBanner = () => {
   return (
     <section className="w-full bg-linear-to-br from-primary via-primary to-secondary px-6 sm:px-10 lg:px-16 py-12 my-10">
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 place-items-center justify-between gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 place-items-center justify-between">
         {/* ── LEFT: Text Content ── */}
         <div className="flex-1 text-center lg:text-left ">
           {/* Badge */}

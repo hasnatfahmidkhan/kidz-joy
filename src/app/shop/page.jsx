@@ -50,11 +50,11 @@ export const generateMetadata = async ({ searchParams }) => {
       title: fullTitle,
       description:
         "Browse our full collection of safe, fun and educational toys for children.",
-      url: `https://kidzjoy.com/shop${canonicalQuery ? `?${canonicalQuery}` : ""}`,
+      url: `https://kidz-joy.vercel.app/shop${canonicalQuery ? `?${canonicalQuery}` : ""}`,
       siteName: "Kidz Joy",
       images: [
         {
-          url: "https://kidzjoy.com/og-shop.png",
+          url: "https://kidz-joy.vercel.app/og-shop.png",
           width: 1200,
           height: 630,
           alt: "Kidz Joy Shop — Toys for Kids",
@@ -67,10 +67,10 @@ export const generateMetadata = async ({ searchParams }) => {
       title: fullTitle,
       description:
         "Browse safe, fun and educational toys for kids at Kidz Joy.",
-      images: ["https://kidzjoy.com/og-shop.png"],
+      images: ["https://kidz-joy.vercel.app/og-shop.png"],
     },
     alternates: {
-      canonical: `https://kidzjoy.com/shop${canonicalQuery ? `?${canonicalQuery}` : ""}`,
+      canonical: `https://kidz-joy.vercel.app/shop${canonicalQuery ? `?${canonicalQuery}` : ""}`,
     },
   };
 };
