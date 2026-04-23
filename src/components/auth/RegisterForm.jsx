@@ -20,6 +20,7 @@ const RegisterForm = () => {
       password: form.password.value,
     };
     const result = await postUser(payload);
+
     if (result.ok) {
       toast.success(result.message);
     } else {
@@ -75,21 +76,19 @@ const RegisterForm = () => {
             placeholder="••••••••"
             className="input input-bordered w-full pl-11 rounded-2xl focus:outline-none focus:border-primary"
           />
-          <span>
-            {showPassword ? (
-              <FaEyeSlash
-                onClick={() => setShowPassword(!showPassword)}
-                size={22}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
-              />
-            ) : (
-              <FaEye
-                onClick={() => setShowPassword(!showPassword)}
-                size={20}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
-              />
-            )}
-          </span>
+          {showPassword ? (
+            <FaEyeSlash
+              onClick={() => setShowPassword(!showPassword)}
+              size={22}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+            />
+          ) : (
+            <FaEye
+              onClick={() => setShowPassword(!showPassword)}
+              size={20}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+            />
+          )}
         </div>
       </label>
 

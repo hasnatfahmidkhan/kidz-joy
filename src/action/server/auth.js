@@ -72,3 +72,32 @@ export const postUser = async (payload) => {
     return { ok: false, message: "Something went wrong. Please try again." };
   }
 };
+
+export const loginUser = async (payload) => {
+  try {
+    const email = (payload?.email || "").trim().toLowerCase();
+    const password = payload?.password || "";
+
+    if (!email || !password) return null;
+
+    const usersCol = await dbConnect(collections.USERS);
+
+    const user = await usersCol.findOne({ email, provider: "credentials" });
+    if (!user) return null;
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return null;
+
+    // ✅ Return only safe fields (NO password)
+    return {
+      id: user._id.toString(), // NextAuth needs `id`
+      name: user.name || "",
+      email: user.email,
+      image: user.image || "",
+      role: user.role || "user",
+    };
+  } catch (err) {
+    console.error("loginUser error:", err);
+    return null;
+  }
+};

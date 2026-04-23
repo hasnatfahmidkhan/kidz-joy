@@ -2,14 +2,53 @@
 import Link from "next/link";
 import { FiMail, FiLock } from "react-icons/fi";
 import SocialLogin from "./SocialLogin";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { signIn } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [ischecked, setIschecked] = useState(false);
+  const [error, setError] = useState("");
 
-    const handleLogin = async()=>{
-            
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const form = e.target;
+
+    const payload = {
+      email: form.email.value,
+      password: form.password.value,
+      remember: form.remember.checked, // ✅ correct
+      //   callbackUrl: "/", // ✅ where to go after login
+      redirect: false,
+    };
+
+    const result = await signIn("credentials", {
+      ...payload,
+    });
+
+    if (result?.error) {
+      // NextAuth commonly returns "CredentialsSignin" here
+      setError("Invalid email or password.");
+      return;
     }
+    console.log("result from login form ", result);
+    // ✅ success
+    // router.push(result?.url || "/");
+  };
   return (
     <form onSubmit={handleLogin} className="card-body p-6 sm:p-8 gap-5">
+      {/* Error */}
+      {error && (
+        <div className="alert alert-error text-sm">
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Email */}
       <label className="form-control w-full">
         <div className="label pb-1">
@@ -18,6 +57,7 @@ const LoginForm = () => {
         <div className="relative">
           <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40" />
           <input
+            name="email"
             type="email"
             placeholder="you@example.com"
             className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
@@ -39,28 +79,45 @@ const LoginForm = () => {
         <div className="relative">
           <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40" />
           <input
-            type="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
           />
+          {showPassword ? (
+            <FaEyeSlash
+              onClick={() => setShowPassword(!showPassword)}
+              size={22}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+            />
+          ) : (
+            <FaEye
+              onClick={() => setShowPassword(!showPassword)}
+              size={20}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+            />
+          )}
         </div>
       </label>
 
       {/* Remember me */}
-      <div className="flex items-center justify-between">
-        <label className="label cursor-pointer justify-start gap-2">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-primary checkbox-sm"
-          />
-          <span className="label-text text-sm text-neutral/70 font-semibold">
-            Remember me
-          </span>
-        </label>
-      </div>
+      <label className="label cursor-pointer justify-start gap-2">
+        <input
+          onChange={() => setIschecked(!ischecked)}
+          checked={ischecked}
+          name="remember"
+          type="checkbox"
+          className="checkbox checkbox-primary checkbox-sm"
+        />
+        <span className="label-text text-sm text-neutral/70 font-semibold">
+          Remember me
+        </span>
+      </label>
 
-      {/* Submit */}
-      <button type="submit" className="btn btn-primary rounded-2xl h-12 font-black">
+      <button
+        type="submit"
+        className="btn btn-primary rounded-2xl h-12 font-black"
+      >
         Login
       </button>
 

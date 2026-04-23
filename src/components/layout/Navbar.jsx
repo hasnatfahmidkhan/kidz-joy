@@ -28,7 +28,6 @@ const Navbar = () => {
   return (
     <nav className="relative max-w-7xl mx-auto px-2 sm:px-4">
       <div className="navbar min-h-16 gap-1">
-
         {/* ── NAVBAR START ── */}
         <div className="navbar-start gap-1">
           <MobileMenu navLinks={navLinks} />
