@@ -2,7 +2,7 @@ import { loginUser, upsertOAuthUser } from "@/action/server/auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-
+import { collections, dbConnect } from "../db/dbConnect";
 
 export const authOptions = {
   providers: [
@@ -16,7 +16,7 @@ export const authOptions = {
         return null;
       },
     }),
-    
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -34,10 +34,19 @@ export const authOptions = {
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+   
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        if (account.provider === "google" || account.provider === "github") {
+          const dbUser = await (
+            await dbConnect(collections.USERS)
+          ).findOne({ email: user.email });
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+        } else {
+          token.id = user.id;
+          token.role = user.role;
+        }
       }
       return token;
     },
