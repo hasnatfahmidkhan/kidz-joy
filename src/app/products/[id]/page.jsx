@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Link from "next/link";
+import CartButton from "@/components/buttons/CartButton";
 
 export const generateMetadata = async ({ params }) => {
   const { id } = await params;
@@ -190,9 +191,7 @@ export default async function ProductDetails({ params }) {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mb-10">
-            <button className="btn btn-primary btn-lg flex-1 rounded-2xl gap-3 shadow-lg shadow-primary/20">
-              <FiShoppingCart size={20} /> Add to Cart
-            </button>
+            <CartButton product={product} />
             <button className="btn btn-outline btn-lg border-2 rounded-2xl">
               Buy Now
             </button>

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PreLoaderManager from "@/components/Loader/PreLoaderManager";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${poppins.className} h-full antialiased`}>
       <body className="min-h-svh">
         <PreLoaderManager />
+        <Toaster />
         <header className="bg-primary">
           <Navbar />
         </header>

@@ -3,10 +3,31 @@
 import Link from "next/link";
 import { FiUser, FiMail, FiLock } from "react-icons/fi";
 import SocialLogin from "./SocialLogin";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { postUser } from "@/action/server/auth";
+import toast from "react-hot-toast";
 
 const RegisterForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      name: form.name.value,
+      email: form.email.value,
+      password: form.password.value,
+    };
+    const result = await postUser(payload);
+    if (result.ok) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  };
   return (
-    <form className="card-body p-6 sm:p-8 gap-5">
+    <form onSubmit={handleRegister} className="card-body p-6 sm:p-8 gap-5">
       {/* Name */}
       <label className="form-control w-full">
         <div className="label pb-1">
@@ -15,11 +36,12 @@ const RegisterForm = () => {
           </span>
         </div>
         <div className="relative">
-          <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40" />
+          <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10" />
           <input
             type="text"
+            name="name"
             placeholder="Your Name"
-            className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
+            className="input input-bordered w-full pl-11 rounded-2xl focus:outline-none focus:border-primary"
           />
         </div>
       </label>
@@ -30,11 +52,12 @@ const RegisterForm = () => {
           <span className="label-text font-bold text-neutral/70">Email</span>
         </div>
         <div className="relative">
-          <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40" />
+          <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10" />
           <input
+            name="email"
             type="email"
             placeholder="you@example.com"
-            className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
+            className="input input-bordered w-full pl-11 rounded-2xl focus:outline-none focus:border-primary"
           />
         </div>
       </label>
@@ -45,17 +68,33 @@ const RegisterForm = () => {
           <span className="label-text font-bold text-neutral/70">Password</span>
         </div>
         <div className="relative">
-          <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40" />
+          <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10" />
           <input
-            type="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
-            className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
+            className="input input-bordered w-full pl-11 rounded-2xl focus:outline-none focus:border-primary"
           />
+          <span>
+            {showPassword ? (
+              <FaEyeSlash
+                onClick={() => setShowPassword(!showPassword)}
+                size={22}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+              />
+            ) : (
+              <FaEye
+                onClick={() => setShowPassword(!showPassword)}
+                size={20}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral/40 z-10 cursor-pointer"
+              />
+            )}
+          </span>
         </div>
       </label>
 
       {/* Confirm Password */}
-      <label className="form-control w-full">
+      {/* <label className="form-control w-full">
         <div className="label pb-1">
           <span className="label-text font-bold text-neutral/70">
             Confirm Password
@@ -66,10 +105,10 @@ const RegisterForm = () => {
           <input
             type="password"
             placeholder="••••••••"
-            className="input input-bordered w-full px-4 rounded-2xl focus:outline-none focus:border-primary"
+            className="input input-bordered w-full pl-11 rounded-2xl focus:outline-none focus:border-primary"
           />
         </div>
-      </label>
+      </label> */}
 
       {/* Submit */}
       <button className="btn btn-primary rounded-2xl h-12 font-black mt-2">

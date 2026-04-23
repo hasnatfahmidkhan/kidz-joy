@@ -4,8 +4,12 @@ import { FiMail, FiLock } from "react-icons/fi";
 import SocialLogin from "./SocialLogin";
 
 const LoginForm = () => {
+
+    const handleLogin = async()=>{
+            
+    }
   return (
-    <form className="card-body p-6 sm:p-8 gap-5">
+    <form onSubmit={handleLogin} className="card-body p-6 sm:p-8 gap-5">
       {/* Email */}
       <label className="form-control w-full">
         <div className="label pb-1">
@@ -56,7 +60,7 @@ const LoginForm = () => {
       </div>
 
       {/* Submit */}
-      <button className="btn btn-primary rounded-2xl h-12 font-black">
+      <button type="submit" className="btn btn-primary rounded-2xl h-12 font-black">
         Login
       </button>
 
