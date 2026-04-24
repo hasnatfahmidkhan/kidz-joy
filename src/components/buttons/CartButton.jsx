@@ -1,4 +1,5 @@
 "use client";
+
 import { useCart } from "@/context/CartContext";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,25 +12,35 @@ const CartButton = ({ product }) => {
   const session = useSession();
   const { addToCart } = useCart();
 
-  const handleAdd2Cart = () => {
-    const isLogin = session?.status === "authenticated";
-    if (isLogin) {
-      const cartItem = {
-        productId: product._id,
-        email: session?.data?.user?.email,
-        title: product.title,
-        image: product.image,
-        price: product.price,
-        discount: product.discount,
-        category: product.category,
-      };
-
-      addToCart(cartItem);
-      toast.success(`${product.title}added successfully!`);
-    } else {
+  const handleAdd2Cart = async () => {
+    // ── 1. Client UX check (redirect) ──
+    if (session?.status !== "authenticated") {
       router.push(`/login?callbackUrl=${pathname}`);
+      return;
     }
+
+    const cartItem = {
+      productId: product._id,
+      email: session?.data?.user?.email,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+      discount: product.discount,
+      category: product.category,
+    };
+
+    // ── 2. Server checks auth again (security) ──
+    const result = await addToCart(cartItem);
+
+    if (!result?.ok) {
+      // server rejected — show message
+      toast.error(result?.message || "Could not add to cart.");
+      return;
+    }
+
+    toast.success(`${product.title} added to cart!`);
   };
+
   return (
     <button
       onClick={handleAdd2Cart}

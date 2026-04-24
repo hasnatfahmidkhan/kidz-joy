@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
     ? Math.round(product.price - (product.price * product.discount) / 100)
     : product.price;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const isLogin = session?.status === "authenticated";
     if (isLogin) {
       const cartItem = {
@@ -30,8 +30,15 @@ const ProductCard = ({ product }) => {
         discount: product.discount,
         category: product.category,
       };
-      addToCart(cartItem);
-      toast.success(`${product.title}added successfully!`);
+      const result = await addToCart(cartItem);
+
+      if (!result?.ok) {
+        // server rejected — show message
+        toast.error(result?.message || "Could not add to cart.");
+        return;
+      }
+
+      toast.success(`${product.title} added to cart!`);
     } else {
       router.push(`/login?callbackUrl=${pathname}`);
     }

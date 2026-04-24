@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, use, useEffect, useState } from "react";
+import { addToCart as serverAddToCart } from "@/action/server/cart";
 
 const CartContext = createContext(null);
 
@@ -8,7 +9,6 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [mounted, setMounted] = useState(false);
 
-  // ── Load from localStorage on mount ──
   useEffect(() => {
     try {
       const stored = localStorage.getItem("kidz_cart");
@@ -19,15 +19,23 @@ export const CartProvider = ({ children }) => {
     setMounted(true);
   }, []);
 
-  // ── Persist on change ──
   useEffect(() => {
     if (mounted) {
       localStorage.setItem("kidz_cart", JSON.stringify(cart));
     }
   }, [cart, mounted]);
 
-  // ── Add ──
-  const addToCart = (product) => {
+  // ── Add (with server auth check) ──
+  const addToCart = async (product) => {
+    // 1. Server verifies session first
+    const result = await serverAddToCart(product);
+
+    if (!result?.ok) {
+      // server rejected it (not logged in / forbidden)
+      return { ok: false, message: result.message };
+    }
+
+    // 2. Only update local state if server approved
     setCart((prev) => {
       const existing = prev.find(
         (item) => item.productId === product.productId,
@@ -41,6 +49,8 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+
+    return { ok: true };
   };
 
   // ── Remove ──
@@ -58,12 +68,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // ── Clear all ──
+  // ── Clear ──
   const clearCart = () => setCart([]);
 
-  // ── Derived values ──
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-
   const cartTotal = cart.reduce((acc, item) => {
     const finalPrice =
       item.discount > 0
@@ -71,12 +79,10 @@ export const CartProvider = ({ children }) => {
         : item.price;
     return acc + finalPrice * item.quantity;
   }, 0);
-
   const cartOriginalTotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
-
   const totalSavings = cartOriginalTotal - cartTotal;
 
   return (

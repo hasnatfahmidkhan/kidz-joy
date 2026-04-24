@@ -24,8 +24,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <CartProvider>
-      <NextAuthProvider>
+    <NextAuthProvider>
+      <CartProvider>
         <html lang="en" className={`${poppins.className} h-full antialiased`}>
           <body className="min-h-svh">
             <PreLoaderManager />
@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
             </footer>
           </body>
         </html>
-      </NextAuthProvider>
-    </CartProvider>
+      </CartProvider>
+    </NextAuthProvider>
   );
 }
