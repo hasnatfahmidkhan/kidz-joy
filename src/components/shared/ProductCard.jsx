@@ -1,15 +1,44 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 import { FiShoppingCart, FiStar } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 const ProductCard = ({ product }) => {
+  const { cart, addToCart } = useCart();
+  const pathname = usePathname();
+  const session = useSession();
+  const router = useRouter();
+
   const hasDiscount = product.discount > 0;
   const discountedPrice = hasDiscount
     ? Math.round(product.price - (product.price * product.discount) / 100)
     : product.price;
 
+  const handleAddToCart = () => {
+    const isLogin = session?.status === "authenticated";
+    if (isLogin) {
+      const cartItem = {
+        productId: product._id,
+        email: session?.data?.user?.email,
+        title: product.title,
+        image: product.image,
+        price: product.price,
+        discount: product.discount,
+        category: product.category,
+      };
+      addToCart(cartItem);
+      toast.success(`${product.title}added successfully!`);
+    } else {
+      router.push(`/login?callbackUrl=${pathname}`);
+    }
+  };
+
   return (
-    <div className="group bg-base-100 rounded-2xl border border-base-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col">
+    <div className="group bg-base-100 rounded-2xl border border-base-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full">
       {/* ── Image ── */}
       <Link
         href={`/products/${product._id}`}
@@ -40,7 +69,7 @@ const ProductCard = ({ product }) => {
         {/* Title */}
         <Link
           href={`/products/${product._id}`}
-          className="font-bold text-neutral text-sm leading-snug hover:text-primary transition-colors duration-150 line-clamp-2 flex-1"
+          className="font-bold text-neutral text-sm leading-snug hover:text-primary transition-colors duration-150 line-clamp-2 flex-1 truncate"
         >
           {product.title}
         </Link>
@@ -71,6 +100,7 @@ const ProductCard = ({ product }) => {
           </div>
 
           <button
+            onClick={handleAddToCart}
             className="btn btn-primary btn-sm btn-circle shadow-sm hover:scale-110 transition-transform duration-150"
             aria-label={`Add ${product.title} to cart`}
           >
