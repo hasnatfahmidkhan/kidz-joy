@@ -2,6 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/authOptions";
+import { placeOrder } from "./placeOrder";
 
 export const addToCart = async (cartItem) => {
   try {
@@ -35,3 +36,4 @@ export const addToCart = async (cartItem) => {
     return { ok: false, message: "Something went wrong." };
   }
 };
+

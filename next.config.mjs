@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["sslcommerz-lts", "node-fetch", "form-data"],
+
   /* config options here */
   images: {
     remotePatterns: [
