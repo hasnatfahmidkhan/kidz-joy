@@ -10,9 +10,9 @@ import {
   FiCheckCircle,
   FiClock,
   FiXCircle,
-  FiSave,
 } from "react-icons/fi";
 import { MdOutlineLocalShipping } from "react-icons/md";
+import OrderStatusUpdater from "@/components/admin/OrderStatusUpdater";
 
 export const metadata = {
   title: "Order Details",
@@ -149,21 +149,7 @@ export default async function AdminOrderPage({ params }) {
               Update Status
             </p>
 
-            <select
-              defaultValue={o.status}
-              className="select select-bordered w-full text-sm font-bold"
-            >
-              {statusOptions.map((s) => (
-                <option key={s} value={s} className="capitalize">
-                  {s}
-                </option>
-              ))}
-            </select>
-
-            <button className="btn btn-primary w-full rounded-2xl gap-2">
-              <FiSave size={16} />
-              Update Status
-            </button>
+            <OrderStatusUpdater orderId={o._id} initialStatus={o.status} />
 
             {/* Timeline */}
             <div className="pt-3 border-t border-base-200">

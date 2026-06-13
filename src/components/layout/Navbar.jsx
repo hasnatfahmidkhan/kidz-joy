@@ -1,9 +1,9 @@
 import Logo from "../Logo/Logo";
-import MobileMenu from "../navbar/MobileMenu";
 import { NavLink, DropdownNavLink } from "../navbar/NavLink";
 import SearchBar from "../navbar/SearchBar";
 import CartButton from "../navbar/CartButton";
 import UserMenu from "../navbar/UserMenu";
+import MobileMenu from "../navbar/MobileMenu";
 
 const navLinks = [
   { label: "Home", href: "/" },

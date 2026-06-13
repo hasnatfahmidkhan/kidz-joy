@@ -1,7 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+
 import PreLoaderManager from "@/components/Loader/PreLoaderManager";
 import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "@/provider/NextAuthProvider";
@@ -30,15 +29,9 @@ export default function RootLayout({ children }) {
           <body className="min-h-svh">
             <PreLoaderManager />
             <Toaster />
-            <header className="bg-primary">
-              <Navbar />
-            </header>
             <main className="w-full min-h-[calc(100dvh-475px)]">
               {children}
             </main>
-            <footer className="bg-primary">
-              <Footer />
-            </footer>
           </body>
         </html>
       </CartProvider>

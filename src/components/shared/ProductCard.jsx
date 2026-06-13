@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 const ProductCard = ({ product }) => {
   const { cart, addToCart } = useCart();
   const pathname = usePathname();
+  console.log(pathname, "from product card");
   const session = useSession();
   const router = useRouter();
 
