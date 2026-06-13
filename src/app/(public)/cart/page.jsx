@@ -1,3 +1,6 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/authOptions";
+import { redirect } from "next/navigation";
 import CartPageClient from "@/components/cart/CartPageClient";
 
 export const metadata = {
@@ -5,7 +8,13 @@ export const metadata = {
   description: "Review your selected toys before checkout.",
 };
 
-export default function CartPage() {
-  
+export default async function CartPage() {
+  const session = await getServerSession(authOptions);
+
+  // ── Not logged in → redirect to login ──
+  if (!session) {
+    redirect("/login?callbackUrl=/cart");
+  }
+
   return <CartPageClient />;
 }

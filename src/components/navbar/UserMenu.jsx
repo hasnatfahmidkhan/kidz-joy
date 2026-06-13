@@ -1,11 +1,19 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
+import { signOut } from "next-auth/react";
+import { useCart } from "@/context/CartContext";
+import { useSession } from "next-auth/react";
 
 const UserMenu = () => {
-  const session = useSession();
+  const { clearCart } = useCart();
+  const { data: session, status } = useSession();
+
+  const handleSignOut = async () => {
+    clearCart(); // ── clear cart state + localStorage before logout
+    await signOut({ callbackUrl: "/" });
+  };
 
   return (
     <div className="dropdown dropdown-end">
@@ -22,8 +30,19 @@ const UserMenu = () => {
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-100 text-neutral rounded-box z-50 mt-3 w-44 p-2 shadow-xl border border-base-200"
       >
-        {session.status === "authenticated" ? (
+        {status === "authenticated" ? (
           <>
+            {/* Logged in */}
+            <li className="px-3 py-2 border-b border-base-200 mb-1">
+              <div className="pointer-events-none">
+                <p className="font-black text-neutral text-xs truncate">
+                  {session.user.name}
+                </p>
+                <p className="text-neutral/40 text-[10px] truncate">
+                  {session.user.email}
+                </p>
+              </div>
+            </li>
             <li>
               <Link href="/profile" className="font-semibold">
                 My Profile
@@ -34,19 +53,26 @@ const UserMenu = () => {
                 My Orders
               </Link>
             </li>
+            {session.user.role === "admin" && (
+              <li>
+                <Link href="/admin" className="font-semibold text-primary">
+                  Admin Panel
+                </Link>
+              </li>
+            )}
             <div className="divider my-1" />
             <li>
               <button
-                onClick={() => signOut()}
+                onClick={handleSignOut}
                 className="font-semibold text-error"
               >
-                Log out
+                Sign Out
               </button>
             </li>
           </>
         ) : (
           <>
-            {" "}
+            {/* Not logged in */}
             <li>
               <Link href="/login" className="font-semibold">
                 Login

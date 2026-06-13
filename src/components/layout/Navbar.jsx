@@ -4,6 +4,8 @@ import SearchBar from "../navbar/SearchBar";
 import CartButton from "../navbar/CartButton";
 import UserMenu from "../navbar/UserMenu";
 import MobileMenu from "../navbar/MobileMenu";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/authOptions";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -25,7 +27,10 @@ const navLinks = [
 
 const CART_COUNT = 3; // 🔁 replace with real DB/session value later
 
-const Navbar = () => {
+const Navbar = async () => {
+  // server session check
+  const session = await getServerSession(authOptions);
+
   return (
     <nav className="relative max-w-7xl mx-auto px-2 sm:px-4">
       <div className="navbar min-h-16 gap-1">
@@ -58,7 +63,7 @@ const Navbar = () => {
         {/* ── NAVBAR END ── */}
         <div className="navbar-end gap-1">
           <SearchBar />
-          <CartButton count={CART_COUNT} />
+          {session && <CartButton count={CART_COUNT} />}
           <UserMenu />
         </div>
       </div>

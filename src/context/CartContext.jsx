@@ -1,88 +1,113 @@
 "use client";
 
 import { createContext, use, useEffect, useState } from "react";
-import { addToCart as serverAddToCart } from "@/action/server/cart";
+import { useSession } from "next-auth/react";
 
 const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
-  const [mounted, setMounted] = useState(false);
+  const { data: session, status } = useSession();
 
-  useEffect(() => {
+  const email = session?.user?.email;
+  const cartKey = email ? `kidz_cart_${email}` : null;
+
+  const [cart, setCart] = useState(() => {
+    if (typeof window === "undefined" || !email) return [];
+
     try {
-      const stored = localStorage.getItem("kidz_cart");
-      if (stored) setCart(JSON.parse(stored));
+      const stored = localStorage.getItem(`kidz_cart_${email}`);
+      return stored ? JSON.parse(stored) : [];
     } catch {
-      setCart([]);
+      return [];
     }
-    setMounted(true);
-  }, []);
+  });
 
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("kidz_cart", JSON.stringify(cart));
-    }
-  }, [cart, mounted]);
+  const saveCart = (newCart, key) => {
+    if (typeof window === "undefined" || !key) return;
+    localStorage.setItem(key, JSON.stringify(newCart));
+  };
 
-  // ── Add (with server auth check) ──
-  const addToCart = async (product) => {
-    // 1. Server verifies session first
-    const result = await serverAddToCart(product);
+  // ── ADD TO CART ──
+  const addToCart = (product) => {
+    if (!email) return { ok: false };
 
-    if (!result?.ok) {
-      // server rejected it (not logged in / forbidden)
-      return { ok: false, message: result.message };
-    }
-
-    // 2. Only update local state if server approved
     setCart((prev) => {
+      let updated;
+
       const existing = prev.find(
         (item) => item.productId === product.productId,
       );
+
       if (existing) {
-        return prev.map((item) =>
+        updated = prev.map((item) =>
           item.productId === product.productId
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
+      } else {
+        updated = [...prev, { ...product, quantity: 1 }];
       }
-      return [...prev, { ...product, quantity: 1 }];
+
+      saveCart(updated, cartKey);
+      return updated;
     });
 
     return { ok: true };
   };
 
-  // ── Remove ──
+  // ── REMOVE ──
   const removeFromCart = (productId) => {
-    setCart((prev) => prev.filter((item) => item.productId !== productId));
+    setCart((prev) => {
+      const updated = prev.filter((item) => item.productId !== productId);
+
+      saveCart(updated, cartKey);
+      return updated;
+    });
   };
 
-  // ── Update quantity ──
+  // ── UPDATE QUANTITY ──
   const updateQuantity = (productId, quantity) => {
-    if (quantity < 1) return removeFromCart(productId);
-    setCart((prev) =>
-      prev.map((item) =>
-        item.productId === productId ? { ...item, quantity } : item,
-      ),
-    );
+    setCart((prev) => {
+      let updated;
+
+      if (quantity < 1) {
+        updated = prev.filter((item) => item.productId !== productId);
+      } else {
+        updated = prev.map((item) =>
+          item.productId === productId ? { ...item, quantity } : item,
+        );
+      }
+
+      saveCart(updated, cartKey);
+      return updated;
+    });
   };
 
-  // ── Clear ──
-  const clearCart = () => setCart([]);
+  // ── CLEAR CART ──
+  const clearCart = () => {
+    setCart([]);
+    if (cartKey && typeof window !== "undefined") {
+      localStorage.removeItem(cartKey);
+    }
+  };
 
+  // ── Derived values ──
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   const cartTotal = cart.reduce((acc, item) => {
     const finalPrice =
       item.discount > 0
         ? Math.round(item.price - (item.price * item.discount) / 100)
         : item.price;
+
     return acc + finalPrice * item.quantity;
   }, 0);
+
   const cartOriginalTotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
+
   const totalSavings = cartOriginalTotal - cartTotal;
 
   return (
@@ -93,7 +118,7 @@ export const CartProvider = ({ children }) => {
         cartTotal,
         cartOriginalTotal,
         totalSavings,
-        mounted,
+        status,
         addToCart,
         removeFromCart,
         updateQuantity,
