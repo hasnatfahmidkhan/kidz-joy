@@ -7,7 +7,7 @@ import MobileMenu from "../navbar/MobileMenu";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/authOptions";
 
-const navLinks = [
+const baseNavLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   {
@@ -25,11 +25,18 @@ const navLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
+const authNavLinks = [
+  { label: "Wish List", href: "/wishlist", protected: true },
+];
+
 const CART_COUNT = 3; // 🔁 replace with real DB/session value later
 
 const Navbar = async () => {
   // server session check
   const session = await getServerSession(authOptions);
+
+  // Build navLinks based on session
+  const navLinks = [...baseNavLinks, ...(session ? authNavLinks : [])];
 
   return (
     <nav className="relative max-w-7xl mx-auto px-2 sm:px-4">
