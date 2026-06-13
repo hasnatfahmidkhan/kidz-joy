@@ -16,51 +16,6 @@ export const metadata = {
   title: "Admin Dashboard",
 };
 
-const statCards = [
-  {
-    label: "Total Orders",
-    value: 0,
-    icon: FiShoppingBag,
-    color: "bg-primary/10 text-primary",
-    trend: "",
-  },
-  {
-    label: "Revenue",
-    value: 0,
-    icon: FiDollarSign,
-    color: "bg-success/10 text-success",
-    trend: "",
-  },
-  {
-    label: "Pending",
-    value: 0,
-    icon: FiClock,
-    color: "bg-warning/10 text-warning",
-    trend: "Needs attention",
-  },
-  {
-    label: "Delivered",
-    value: 0,
-    icon: FiCheckCircle,
-    color: "bg-info/10 text-info",
-    trend: "Completed",
-  },
-  {
-    label: "Shipped",
-    value: 0,
-    icon: FiTruck,
-    color: "bg-accent/10 text-accent",
-    trend: "In transit",
-  },
-  {
-    label: "Cancelled",
-    value: 0,
-    icon: FiXCircle,
-    color: "bg-error/10 text-error",
-    trend: "Refund needed?",
-  },
-];
-
 const statusBadge = {
   pending: "badge-warning",
   confirmed: "badge-info",
@@ -71,6 +26,50 @@ const statusBadge = {
 };
 
 export default async function AdminDashboard() {
+  const statCards = [
+    {
+      label: "Total Orders",
+      value: 0,
+      icon: FiShoppingBag,
+      color: "bg-primary/10 text-primary",
+      trend: "",
+    },
+    {
+      label: "Revenue",
+      value: 0,
+      icon: FiDollarSign,
+      color: "bg-success/10 text-success",
+      trend: "",
+    },
+    {
+      label: "Pending",
+      value: 0,
+      icon: FiClock,
+      color: "bg-warning/10 text-warning",
+      trend: "Needs attention",
+    },
+    {
+      label: "Delivered",
+      value: 0,
+      icon: FiCheckCircle,
+      color: "bg-info/10 text-info",
+      trend: "Completed",
+    },
+    {
+      label: "Shipped",
+      value: 0,
+      icon: FiTruck,
+      color: "bg-accent/10 text-accent",
+      trend: "In transit",
+    },
+    {
+      label: "Cancelled",
+      value: 0,
+      icon: FiXCircle,
+      color: "bg-error/10 text-error",
+      trend: "Refund needed?",
+    },
+  ];
   const stats = await getAdminStats();
   const recent = await getRecentOrders(8);
 
