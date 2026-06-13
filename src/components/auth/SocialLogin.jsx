@@ -24,8 +24,9 @@ const SocialLogin = () => {
       // No need to setLoading(false) on success because redirect happens
     } catch (error) {
       console.error("Google login error:", error);
-      setLoading(false);
       toast.error("Failed to login with Google");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,11 +37,11 @@ const SocialLogin = () => {
       await signIn("github", {
         callbackUrl: callbackUrl,
       });
-      // No need to setLoading(false) on success because redirect happens
     } catch (error) {
       console.error("GitHub login error:", error);
-      setLoading(false);
       toast.error("Failed to login with GitHub");
+    } finally {
+      setLoading(false);
     }
   };
 
