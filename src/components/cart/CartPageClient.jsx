@@ -25,18 +25,6 @@ const CartPageClient = () => {
     mounted,
   } = useCart();
 
-  // ── Not mounted yet (avoid hydration mismatch) ──
-  if (!mounted) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 bg-base-300 rounded-full" />
-          <div className="h-64 w-full bg-base-300 rounded-2xl" />
-        </div>
-      </div>
-    );
-  }
-
   // ── Empty Cart ──
   if (cart.length === 0) {
     return (
