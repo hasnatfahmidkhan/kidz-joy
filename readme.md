@@ -2,7 +2,7 @@
 
 A modern full-stack e-commerce platform for children’s toys and educational products, built with **Next.js 16**, **React 19**, and **MongoDB**.
 
-![Kidz Joy](public/assets/hero.png)
+![Kidz Joy](https://res.cloudinary.com/dye6u4hpt/image/upload/q_auto/f_auto/v1781352467/home_banner_qmydpy.webp)
 
 ---
 
