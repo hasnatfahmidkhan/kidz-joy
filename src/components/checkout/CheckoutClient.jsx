@@ -8,6 +8,7 @@ import DeliveryForm from "./DeliveryForm";
 import PaymentSelector from "./PaymentSelector";
 import OrderSummary from "./OrderSummary";
 import PlaceOrderButton from "./PlaceOrderButton";
+import CouponInput from "./CouponInput";
 import toast from "react-hot-toast";
 
 const CheckoutClient = () => {
@@ -17,8 +18,8 @@ const CheckoutClient = () => {
   const [shippingCost, setShippingCost] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isLoading, setIsLoading] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
-  // ── Guard: empty cart ──
   if (cart.length === 0) {
     router.replace("/cart");
     return null;
@@ -29,8 +30,6 @@ const CheckoutClient = () => {
     setIsLoading(true);
 
     const form = e.target;
-
-    // ── Build delivery object from form ──
     const delivery = {
       name: form.name.value,
       phone: form.phone.value,
@@ -41,20 +40,12 @@ const CheckoutClient = () => {
       notes: form.notes.value,
     };
 
-    // ── Basic client validation ──
     if (!delivery.district) {
       toast.error("Please select your district.");
       setIsLoading(false);
       return;
     }
 
-    if (cart.length === 0) {
-      toast.error("Your cart is empty.");
-      setIsLoading(false);
-      return;
-    }
-
-    // ── Call server action ──
     const result = await placeOrder({
       delivery,
       paymentMethod,
@@ -62,6 +53,8 @@ const CheckoutClient = () => {
         productId: item.productId,
         quantity: item.quantity,
       })),
+      // ── Pass coupon to server ──
+      coupon: appliedCoupon || null,
     });
 
     if (!result?.ok) {
@@ -70,15 +63,12 @@ const CheckoutClient = () => {
       return;
     }
 
-    // ── Success ──
-    clearCart(); // clear localStorage cart
+    clearCart();
 
     if (result.method === "cod") {
-      // COD → go to success page
       toast.success("Order placed successfully! 🎉");
       router.push(`/order-success/${result.orderId}`);
     } else {
-      // SSL Commerz → redirect to payment gateway
       window.location.href = result.gatewayUrl;
     }
   };
@@ -86,14 +76,21 @@ const CheckoutClient = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col lg:flex-row gap-8 items-start">
-        {/* ── LEFT: Forms ── */}
+        {/* ── LEFT ── */}
         <div className="flex-1 min-w-0 space-y-5">
-          <DeliveryForm onDistrictChange={(cost) => setShippingCost(cost)} />
-          <PaymentSelector
-            onMethodChange={(method) => setPaymentMethod(method)}
-          />
+          <DeliveryForm onDistrictChange={setShippingCost} />
 
-          {/* Place Order Button — visible only on mobile here */}
+          {/* ── Coupon Input ── */}
+          <div className="bg-base-100 border border-base-200 rounded-2xl p-6">
+            <CouponInput
+              appliedCoupon={appliedCoupon}
+              onApply={setAppliedCoupon}
+              onRemove={() => setAppliedCoupon(null)}
+            />
+          </div>
+
+          <PaymentSelector onMethodChange={setPaymentMethod} />
+
           <div className="lg:hidden">
             <PlaceOrderButton
               isLoading={isLoading}
@@ -102,11 +99,12 @@ const CheckoutClient = () => {
           </div>
         </div>
 
-        {/* ── RIGHT: Order Summary + Button ── */}
+        {/* ── RIGHT ── */}
         <div className="w-full lg:w-80 shrink-0 space-y-4">
-          <OrderSummary shippingCost={shippingCost} />
-
-          {/* Place Order Button — desktop only here */}
+          <OrderSummary
+            shippingCost={shippingCost}
+            appliedCoupon={appliedCoupon}
+          />
           <div className="hidden lg:block">
             <PlaceOrderButton
               isLoading={isLoading}

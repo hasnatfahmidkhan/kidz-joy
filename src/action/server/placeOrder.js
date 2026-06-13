@@ -84,7 +84,26 @@ export const placeOrder = async ({ delivery, paymentMethod, cartItems }) => {
     const total = subtotal + shippingCost;
     const orderId = generateOrderId();
 
-    // ── 6. Build order document ──
+    // ── 6. Apply coupon discount if provided ──
+    let couponDiscount = 0;
+    let couponData = null;
+
+    if (coupon?.code) {
+      // Re-validate on server (never trust client)
+      const validation = await validateCoupon(coupon.code);
+      if (validation.ok) {
+        couponDiscount = Math.round(
+          (subtotal * validation.discountPercent) / 100,
+        );
+        couponData = {
+          code: coupon.code,
+          discountPercent: validation.discountPercent,
+          discountAmount: couponDiscount,
+        };
+      }
+    }
+
+    // ── 7. Build order document ──
     const order = {
       orderId,
       userEmail: session.user.email,
