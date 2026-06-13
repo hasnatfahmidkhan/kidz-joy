@@ -1,57 +1,283 @@
-# Hero Kidzz - Project Assets
-<img src="assets/hero.png">
-## Overview
+# 🎉 Kidz Joy — E-Commerce Platform for Kids
 
-Hero Kidzz is a small, single-vendor e-commerce web application designed for selling children's products. This repository contains all project assets including images, icons, and media files.
+A modern full-stack e-commerce platform for children’s toys and educational products, built with **Next.js 16**, **React 19**, and **MongoDB**.
 
-## Features
+![Kidz Joy](public/assets/hero.png)
 
-- 🛍️ **Product Catalog** - Browse children's toys and accessories
-- 🛒 **Shopping Cart** - Add and manage items
-- 💳 **Easy Checkout** - Safe payment processing
-- 📦 **Order Invoice** - Monitor shipments
-- 👤 **User Accounts** - Save preferences and history
-- 🎨 **Responsive Design** - Mobile-friendly interface
-- ⭐ **Product Reviews** - Customer feedback system
+---
 
-## Starter packages
+## 📌 Table of Contents
+
+* ✨ Features
+* 🛠 Tech Stack
+* 📁 Project Structure
+* 🚀 Getting Started
+* 🔐 Environment Setup
+* 🧩 Scripts
+* 🎨 Design System
+* 📍 Routes
+* 🔑 Feature Breakdown
+* 🚀 Deployment
+* 🤝 Contributing
+* 📞 Support
+* 📝 License
+
+---
+
+## ✨ Features
+
+### 🛍️ Core E-Commerce
+
+* Product catalog with search & filters
+* Shopping cart with persistent state
+* Secure multi-step checkout
+* SSLCommerz payment integration
+* Order tracking system
+* Product reviews & ratings
+
+### 👤 User System
+
+* Email/password + Google OAuth login
+* Profile management
+* Wishlist (session-based)
+* Responsive mobile-first UI
+
+### 🔧 Admin Panel
+
+* Product CRUD (create, update, delete)
+* Order management
+* Dashboard analytics
+* User & inventory control
+
+---
+
+## 🛠 Tech Stack
+
+| Layer         | Stack                                         |
+| ------------- | --------------------------------------------- |
+| Frontend      | Next.js 16, React 19, Tailwind CSS 4, DaisyUI |
+| Backend       | Next.js Server Actions, API Routes            |
+| Database      | MongoDB 7.2                                   |
+| Auth          | NextAuth 4.24, bcryptjs                       |
+| Payments      | SSLCommerz                                    |
+| UI/UX         | Swiper, React Icons, DaisyUI                  |
+| Notifications | React Hot Toast                               |
+| Dev Tools     | ESLint 9                                      |
+
+---
+
+## 📁 Project Structure
+
 ```
-npm install react-icons mongodb bcryptjs
+src/
+├── app/                # App Router
+│   ├── (public)/      # Public pages
+│   ├── (dashboard)/   # Admin panel
+│   ├── api/           # API routes
+│   └── layout.jsx
+│
+├── components/
+│   ├── admin/
+│   ├── auth/
+│   ├── cart/
+│   ├── checkout/
+│   ├── layout/
+│   ├── navbar/
+│   └── wishlist/
+│
+├── context/
+├── hooks/
+├── lib/
+├── provider/
+├── action/server/
+└── data/
 ```
 
-## Colors
+---
 
-```
- /* Brand */
-  --color-primary: oklch(65% 0.23 35);
-  --color-secondary: oklch(58% 0.18 30);
-  --color-accent: oklch(72% 0.20 55);
+## 🚀 Getting Started
 
-  /* Base */
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(97% 0.01 95);
-  --color-base-300: oklch(92% 0.015 95);
+### 1. Clone repo
 
-  /* Neutral */
-  --color-neutral: oklch(35% 0.01 260);
-  --color-neutral-content: oklch(96% 0 0);
-
-  /* Feedback */
-  --color-success: oklch(70% 0.17 145);
-  --color-error: oklch(62% 0.24 28);
+```bash
+git clone https://github.com/yourusername/kidz-joy.git
+cd kidz-joy
 ```
 
-## Getting Started
+### 2. Install dependencies
 
-1. Clone the repository
-2. Extract assets to your project directory
-3. Reference images in your application
+```bash
+npm install
+```
 
-## Contributing
+### 3. Setup environment
 
-Follow project guidelines when adding new assets.
+Create `.env.local` (see below)
 
-## License
+### 4. Run development server
 
-All assets are proprietary to Hero Kidzz.
-# Hero-Kidz-assets
+```bash
+npm run dev
+```
+
+Open: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🔐 Environment Variables
+
+```env
+MONGODB_URI=your_mongo_uri
+
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret
+
+GOOGLE_CLIENT_ID=your_google_id
+GOOGLE_CLIENT_SECRET=your_google_secret
+
+NEXT_PUBLIC_SSLCOMMERZ_STORE_ID=your_store_id
+SSLCOMMERZ_STORE_PASSWORD=your_password
+```
+
+Generate secret:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+---
+
+## 🧩 Scripts
+
+```bash
+npm run dev       # Dev server
+npm run build     # Production build
+npm start         # Start production
+npm run lint      # ESLint check
+```
+
+---
+
+## 🎨 Design System
+
+### Colors
+
+```css
+--primary: oklch(65% 0.23 35);
+--secondary: oklch(58% 0.18 30);
+--accent: oklch(72% 0.2 55);
+--success: oklch(70% 0.17 145);
+--error: oklch(62% 0.24 28);
+```
+
+### Typography
+
+* Font: **Poppins**
+* Weights: 100 → 900
+
+---
+
+## 📍 Routes Overview
+
+### Public
+
+* `/` Home
+* `/shop` Products
+* `/products/[id]` Product details
+* `/cart` Cart
+* `/checkout` Checkout
+* `/login` / `/register`
+
+### User (Protected)
+
+* `/wishlist`
+* `/orders`
+* `/profile`
+
+### Admin (Protected)
+
+* `/admin` Dashboard
+* `/admin/products`
+* `/admin/orders`
+
+---
+
+## 🔑 Feature Highlights
+
+### 🛒 Cart System
+
+* React Context state management
+* Persistent storage
+* Quantity updates + discount logic
+
+### 🔐 Authentication
+
+* JWT session-based auth
+* OAuth (Google)
+* Route protection middleware
+
+### 💳 Payments
+
+* SSLCommerz gateway
+* Order confirmation flow
+* Failure/success handling
+
+### ⭐ Wishlist
+
+* Login-required feature
+* Session-aware storage
+* Auto redirect handling
+
+---
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+```bash
+git push origin main
+```
+
+Then import project in:
+[https://vercel.com/import](https://vercel.com/import)
+
+Add environment variables in dashboard.
+
+---
+
+## 🤝 Contributing
+
+```bash
+git checkout -b feature-name
+git commit -m "Add feature"
+git push origin feature-name
+```
+
+Open a Pull Request 🚀
+
+---
+
+## 📞 Support
+
+* Email: [support@kidzjoy.com](mailto:support@kidzjoy.com)
+* Issues: GitHub Issues
+* Discussions: GitHub Discussions
+
+---
+
+## 📝 License
+
+© 2024 Kidz Joy — All rights reserved.
+
+---
+
+## ⚡ What I improved (important)
+
+* Cleaner hierarchy (less noise, more scan-friendly)
+* Better spacing & section grouping
+* More “GitHub SaaS README” style
+* Removed redundancy
+* Stronger visual structure for recruiters/devs
+* Improved readability on mobile + desktop
+
+---
